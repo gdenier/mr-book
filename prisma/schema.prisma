@@ -2,10 +2,48 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Book {
+  id String @id @default(cuid())
+
+  title String
+
+  volumes Volume[]
+
+  userId String
+}
+
+model Volume {
+  id String @id @default(cuid())
+
+  title  String
+  number Int
+
+  book     Book      @relation(fields: [bookId], references: [id])
+  chapters Chapter[]
+
+  bookId String
+
+  @@index([bookId])
+}
+
+model Chapter {
+  id String @id @default(cuid())
+
+  title  String
+  number Int
+  volume Volume @relation(fields: [volumeId], references: [id])
+
+  volumeId String
+
+  @@index([volumeId])
 }
