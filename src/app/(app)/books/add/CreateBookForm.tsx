@@ -3,7 +3,6 @@
 import { ReactElement, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { editBookSchema } from "./_schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Book } from "@prisma/client"
 import {
@@ -17,32 +16,30 @@ import {
 } from "~/components/ui/form"
 import { Input } from "~/components/ui/input"
 import { Button } from "~/components/ui/button"
-import { editBook } from "./_actions"
+import { createBook } from "./_actions"
 import { redirect } from "next/navigation"
+import { createBookSchema } from "./_schema"
 
-export const EditBookForn = ({
-  book,
-  edit,
+export const CreateBookForn = ({
+  create,
 }: {
-  book: Book
-  edit: typeof editBook
+  create: typeof createBook
 }): ReactElement => {
-  const form = useForm<z.infer<typeof editBookSchema>>({
-    resolver: zodResolver(editBookSchema),
+  const form = useForm<z.infer<typeof createBookSchema>>({
+    resolver: zodResolver(createBookSchema),
     defaultValues: {
-      title: book.title,
-      id: book.id,
+      title: "",
     },
   })
 
   const [isPending, startTransition] = useTransition()
 
-  const onSubmit = (values: z.infer<typeof editBookSchema>) => {
+  const onSubmit = (values: z.infer<typeof createBookSchema>) => {
     startTransition(async () => {
       const data = new FormData()
       Object.entries(values).forEach(([key, value]) => data.append(key, value))
-      await edit(data)
-      redirect(`/books/${book.id}`)
+      const result = await create(data)
+      redirect(`/books/${result.id}`)
     })
   }
 

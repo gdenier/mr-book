@@ -4,7 +4,6 @@ const server = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]),
   CLERK_SECRET_KEY: z.string().min(1),
   DATABASE_URL: z.string().min(1),
-  GOOGLE_BOOK_API_KEY: z.string().min(1),
 })
 
 const client = z.object({
@@ -23,7 +22,6 @@ const processEnv = {
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
     process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
   DATABASE_URL: process.env.DATABASE_URL,
-  GOOGLE_BOOK_API_KEY: process.env.GOOGLE_BOOK_API_KEY,
 }
 
 // Don't touch the part below

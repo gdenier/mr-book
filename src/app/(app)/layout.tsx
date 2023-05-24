@@ -1,7 +1,9 @@
 import { UserButton } from "@clerk/nextjs"
 import Link from "next/link"
-import { Github, HelpCircle } from "lucide-react"
+import { BookMarkedIcon, Github, HelpCircle } from "lucide-react"
 import { Button, buttonVariants } from "~/components/ui/button"
+import { Sidebar } from "~/components/sidebar"
+import { createBook } from "./books/add/_actions"
 
 export default async function AppLayout({
   children,
@@ -9,12 +11,10 @@ export default async function AppLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-[100dvh] bg-red-500">
-      <div className="hidden bg-blue-500 lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
-        <Link href="/">Acceuil</Link>
-      </div>
-      <div className="flex min-h-[100dvh] flex-1 flex-col bg-green-500 lg:pl-64">
-        <header className="-bg-background fixed top-0 z-10 flex h-16 w-full flex-shrink-0 border-b border-border bg-indigo-500 print:hidden lg:w-[calc(100%-16rem)] ">
+    <div className="min-h-[100dvh]">
+      <Sidebar createBook={createBook} />
+      <div className="flex min-h-[100dvh] flex-1 flex-col lg:pl-64">
+        <header className="-bg-background fixed top-0 z-10 flex h-16 w-full flex-shrink-0 border-b border-border print:hidden lg:w-[calc(100%-16rem)] ">
           <UserButton />
         </header>
         <div className="mt-16 flex h-full flex-1 flex-col justify-between print:mt-0">

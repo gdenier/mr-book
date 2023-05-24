@@ -17,11 +17,11 @@ export const withAuth = (
   }
 }
 
-export const withValidation = <Schema extends ZodType<any, any, any>>(
+export const withValidation = <Schema extends ZodType<any, any, any>, Return>(
   schema: Schema,
-  action: (body: z.infer<Schema>, user: User) => Promise<any>
+  action: (body: z.infer<Schema>, user: User) => Promise<Return>
 ) => {
-  return async (formData: FormData) => {
+  return async (formData: FormData): Promise<Return> => {
     const { userId } = auth()
     const user = await currentUser()
     if (!userId || !user)

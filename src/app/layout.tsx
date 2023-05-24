@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className={`${lora.variable} ${inter.variable}`}>
-        <body>{children}</body>
+        <body className="antialiased">{children}</body>
       </html>
     </ClerkProvider>
   )
