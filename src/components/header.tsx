@@ -15,6 +15,7 @@ import {
 } from "./ui/dropdown-menu"
 import { Button, buttonVariants } from "./ui/button"
 import {
+  BookMarkedIcon,
   ChevronRightIcon,
   GlobeIcon,
   InfoIcon,
@@ -38,7 +39,20 @@ export const Header = (): ReactElement => {
   return (
     <header className="fixed top-0 z-10 flex h-16 w-full flex-shrink-0 border-b border-border bg-background print:hidden lg:w-[calc(100%-16rem)] ">
       <div className="flex flex-1 items-center justify-between gap-3 px-2 sm:px-8 sm:pr-4">
-        <p></p>
+        <div />
+        {/* replace by home when done */}
+        <Link
+          href="/books"
+          className={buttonVariants({
+            variant: "link",
+            className: "flex items-center justify-center gap-2",
+          })}
+        >
+          <BookMarkedIcon className="h-6 w-6" />
+          <span className="whitespace-nowrap font-serif text-xl font-semibold tracking-tight">
+            Mr. Book
+          </span>
+        </Link>
         <OptionMenu />
       </div>
     </header>
