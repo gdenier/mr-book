@@ -3,7 +3,7 @@
 import Link, { LinkProps } from "next/link"
 import { ReactElement, ReactNode } from "react"
 import { Button, buttonVariants } from "./ui/button"
-import { BookMarkedIcon, LucideIcon, PlusIcon } from "lucide-react"
+import { BookMarkedIcon, LibraryIcon, LucideIcon, PlusIcon } from "lucide-react"
 import { RouteType } from "next/dist/lib/load-custom-routes"
 import { cn } from "~/lib/utils"
 import { usePathname } from "next/navigation"
@@ -15,15 +15,19 @@ import {
   DialogDescription,
   DialogHeader,
 } from "~/components/ui/dialog"
-import { createBook as createBookFunction } from "~/app/(app)/books/add/_actions"
-import { CreateBookForn } from "~/app/(app)/books/add/CreateBookForm"
+import {
+  createBook as createBookFunction,
+  createShelf as createShelfFunction,
+} from "~/app/(app)/_actions"
+import { CreateBookForm } from "~/app/(app)/CreateBookForm"
+import { CreateShelfForm } from "~/app/(app)/CreateShelfForm"
 
 export const Sidebar = ({
   createBook,
   createShelf,
 }: {
   createBook: typeof createBookFunction
-  createShelf?: Function
+  createShelf: typeof createShelfFunction
 }): ReactElement => {
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
@@ -45,14 +49,11 @@ export const Sidebar = ({
         <nav className="mt-5 flex flex-1 flex-grow flex-col space-y-1 px-2 pb-4">
           <SidebarTitle>Navigation</SidebarTitle>
           <SidebarMenu menu="Livres" Icon={BookMarkedIcon} href="/books" />
+          <SidebarMenu menu="Étagères" Icon={LibraryIcon} href="/shelfs" />
           <SidebarTitle>Gerer les livres</SidebarTitle>
           <CreateBookMenu createBook={createBook} />
           <SidebarTitle>Etageres</SidebarTitle>
-          <SidebarMenu
-            menu="Creer une etagere"
-            Icon={PlusIcon}
-            href="/shelfs/add"
-          />
+          <CreateShelfMenu createShelf={createShelf} />
         </nav>
       </div>
     </div>
@@ -116,9 +117,44 @@ const CreateBookMenu = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Creer un nouveau livre</DialogTitle>
-          <DialogDescription>Quel est le nom de ce livre ?</DialogDescription>
-          <CreateBookForn create={createBook} />
+          <DialogDescription>
+            Quel est le nom de ce livre ? Vous pourrez ensuite rajouter des
+            détails comme les volumes ou bien l&apos;auteur.
+          </DialogDescription>
         </DialogHeader>
+        <CreateBookForm create={createBook} />
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+const CreateShelfMenu = ({
+  createShelf,
+}: {
+  createShelf: typeof createShelfFunction
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger
+        className={buttonVariants({
+          variant: "muted",
+          className: cn(
+            "!justify-start gap-2 !text-foreground hover:text-accent-foreground"
+          ),
+        })}
+      >
+        <PlusIcon className="h-4 w-4" />
+        Creer une étagère
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Creer une nouvelle étagère</DialogTitle>
+          <DialogDescription>
+            Avec les étagère, vous pouvez créer des groupes de livres pour vous
+            organiser ou bien pour les partager à vos amis ou votre famille.
+          </DialogDescription>
+        </DialogHeader>
+        <CreateShelfForm create={createShelf} />
       </DialogContent>
     </Dialog>
   )

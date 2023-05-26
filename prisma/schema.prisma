@@ -30,10 +30,13 @@ model Volume {
 
   book     Book      @relation(fields: [bookId], references: [id])
   chapters Chapter[]
+  Shelf    Shelf?    @relation(fields: [shelfId], references: [id])
 
-  bookId String
+  bookId  String
+  shelfId String?
 
   @@index([bookId])
+  @@index([shelfId])
 }
 
 model Chapter {
@@ -46,4 +49,14 @@ model Chapter {
   volumeId String
 
   @@index([volumeId])
+}
+
+model Shelf {
+  id String @id @default(cuid())
+
+  name String
+
+  volumes Volume[]
+
+  userId String
 }

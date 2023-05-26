@@ -3,8 +3,7 @@
 import { revalidatePath } from "next/cache"
 import db from "~/lib/db"
 import { withValidation } from "~/lib/utils/server"
-import { createBookSchema } from "./_schema"
-import { Book } from "@prisma/client"
+import { createBookSchema, createShelfSchema } from "./_schema"
 
 export const createBook = withValidation(
   createBookSchema,
@@ -16,8 +15,24 @@ export const createBook = withValidation(
       },
     })
 
-    revalidatePath("/")
+    revalidatePath("/books")
 
     return book
+  }
+)
+
+export const createShelf = withValidation(
+  createShelfSchema,
+  async (data, user) => {
+    const shelf = await db.shelf.create({
+      data: {
+        name: data.name,
+        userId: user.id,
+      },
+    })
+
+    revalidatePath("/shelfs")
+
+    return shelf
   }
 )

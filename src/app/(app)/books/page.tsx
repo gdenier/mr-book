@@ -1,6 +1,19 @@
 import { UserButton, auth } from "@clerk/nextjs"
 import Link from "next/link"
 import db from "~/lib/db"
+import { createBook as createBookFunction } from "~/app/(app)/_actions"
+import { PlusIcon } from "lucide-react"
+import { buttonVariants } from "~/components/ui/button"
+import {
+  DialogHeader,
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "~/components/ui/dialog"
+import { cn } from "~/lib/utils"
+import { CreateBookForm } from "../CreateBookForm"
 
 const loader = async () => {
   const { userId } = auth()
@@ -22,19 +35,38 @@ export default async function Home() {
             <p>{book.title}</p>
             <Link
               href={`/books/${book.id}`}
-              className="rounded bg-indigo-700 p-2 text-white"
+              className={buttonVariants({ className: cn("w-fit gap-2") })}
             >
               Voir
             </Link>
           </li>
         ))}
       </ul>
-      <Link
-        href="/books/add"
-        className="w-fit rounded bg-indigo-700 p-2 text-white"
-      >
-        Ajouter un livre
-      </Link>
+      <CreateBookButton createBook={createBookFunction} />
     </div>
+  )
+}
+
+const CreateBookButton = ({
+  createBook,
+}: {
+  createBook: typeof createBookFunction
+}) => {
+  return (
+    <Dialog>
+      <DialogTrigger
+        className={buttonVariants({ className: cn("w-fit gap-2") })}
+      >
+        <PlusIcon className="h-4 w-4" />
+        Creer un livre
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Creer un nouveau livre</DialogTitle>
+          <DialogDescription>Quel est le nom de ce livre ?</DialogDescription>
+        </DialogHeader>
+        <CreateBookForm create={createBook} />
+      </DialogContent>
+    </Dialog>
   )
 }

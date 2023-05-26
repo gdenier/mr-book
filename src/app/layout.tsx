@@ -1,6 +1,8 @@
 import { ClerkProvider } from "@clerk/nextjs"
 import "~/styles/globals.css"
 import { Inter, Lora } from "next/font/google"
+import { cookies } from "next/dist/client/components/headers"
+import { Providers } from "./providers"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -18,8 +20,14 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${lora.variable} ${inter.variable}`}>
-        <body className="antialiased">{children}</body>
+      <html
+        lang="en"
+        className={`${lora.variable} ${inter.variable}`}
+        suppressHydrationWarning
+      >
+        <body className="bg-background antialiased">
+          <Providers>{children}</Providers>
+        </body>
       </html>
     </ClerkProvider>
   )

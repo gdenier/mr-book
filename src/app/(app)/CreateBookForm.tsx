@@ -19,8 +19,9 @@ import { Button } from "~/components/ui/button"
 import { createBook } from "./_actions"
 import { redirect } from "next/navigation"
 import { createBookSchema } from "./_schema"
+import { RotateCw } from "lucide-react"
 
-export const CreateBookForn = ({
+export const CreateBookForm = ({
   create,
 }: {
   create: typeof createBook
@@ -45,7 +46,10 @@ export const CreateBookForn = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -59,7 +63,20 @@ export const CreateBookForn = ({
             </FormItem>
           )}
         />
-        <Button type="submit">{isPending ? "..." : "Submit"}</Button>
+        <Button
+          type="submit"
+          className="ml-auto w-fit gap-2"
+          disabled={isPending}
+        >
+          {isPending ? (
+            <>
+              <RotateCw className="animate-spin" />
+              Création...
+            </>
+          ) : (
+            "Créer le livre"
+          )}
+        </Button>
       </form>
     </Form>
   )
