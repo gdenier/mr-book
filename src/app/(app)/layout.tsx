@@ -18,7 +18,7 @@ export default async function AppLayout({
       <div className="flex min-h-[100dvh] flex-1 flex-col lg:pl-64">
         <Header />
         <div className="mt-16 flex h-full flex-1 flex-col justify-between print:mt-0">
-          <main className="py-6 print:py-0 max-lg:mb-16">{children}</main>
+          <main className="py-6 max-lg:mb-16">{children}</main>
           <Footer />
         </div>
       </div>

@@ -36,7 +36,7 @@ import { useTheme } from "next-themes"
 
 export const Header = (): ReactElement => {
   return (
-    <header className="-bg-background fixed top-0 z-10 flex h-16 w-full flex-shrink-0 border-b border-border print:hidden lg:w-[calc(100%-16rem)] ">
+    <header className="fixed top-0 z-10 flex h-16 w-full flex-shrink-0 border-b border-border bg-background print:hidden lg:w-[calc(100%-16rem)] ">
       <div className="flex flex-1 items-center justify-between gap-3 px-2 sm:px-8 sm:pr-4">
         <p></p>
         <OptionMenu />
