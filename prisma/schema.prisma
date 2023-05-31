@@ -46,6 +46,10 @@ model Tag {
   name String
 
   books TagOnBook[]
+
+  userId String
+
+  @@index([userId])
 }
 
 model Volume {

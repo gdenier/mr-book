@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { editBookSchema } from "./_schema"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Book } from "@prisma/client"
+import { Book, Tag } from "@prisma/client"
 import { Form } from "~/components/ui/form"
 import { Button } from "~/components/ui/button"
 import { editBook } from "./_actions"
@@ -15,15 +15,20 @@ import { RotateCw, SaveIcon, TrashIcon } from "lucide-react"
 import { GeneralFormPart } from "./GeneralFormPart"
 import { ContentFormPart } from "./ContentFormPart"
 import { ExtraFormPart } from "./ExtraFormPart"
+import { createTag as createTagFunction } from "~/app/(app)/_actions"
 
 export type EditBookFormValues = z.infer<typeof editBookSchema>
 
 export const EditBookForn = ({
   book,
+  tags,
   edit,
+  createTag,
 }: {
   book: Book
+  tags: Tag[]
   edit: typeof editBook
+  createTag: typeof createTagFunction
 }): ReactElement => {
   const form = useForm<EditBookFormValues>({
     resolver: zodResolver(editBookSchema),
@@ -78,7 +83,7 @@ export const EditBookForn = ({
           }
         >
           <div className="space-y-6">
-            <GeneralFormPart />
+            <GeneralFormPart tags={tags} createTag={createTag} />
             <ContentFormPart />
             <ExtraFormPart />
             <div className="space-x-2">

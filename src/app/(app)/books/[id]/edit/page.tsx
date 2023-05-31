@@ -2,14 +2,18 @@ import { auth } from "@clerk/nextjs"
 import db from "~/lib/db"
 import { EditBookForn } from "./EditBookForn"
 import { editBook } from "./_actions"
+import { createTag } from "~/app/(app)/_actions"
 
 const loader = async (id: string) => {
   const { userId } = auth()
   if (!userId) throw new Error("Cannot load for disconnected user")
 
-  const books = await db.book.findFirstOrThrow({ where: { userId, id } })
+  const [book, tags] = await Promise.all([
+    db.book.findFirstOrThrow({ where: { userId, id } }),
+    db.tag.findMany(),
+  ])
 
-  return books
+  return { book, tags }
 }
 
 export default async function EditBookPage({
@@ -17,7 +21,14 @@ export default async function EditBookPage({
 }: {
   params: { id: string }
 }) {
-  const book = await loader(params.id)
+  const { book, tags } = await loader(params.id)
 
-  return <EditBookForn book={book} edit={editBook} />
+  return (
+    <EditBookForn
+      book={book}
+      tags={tags}
+      edit={editBook}
+      createTag={createTag}
+    />
+  )
 }

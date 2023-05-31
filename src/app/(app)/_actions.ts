@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 import db from "~/lib/db"
 import { withValidation } from "~/lib/utils/server"
-import { createBookSchema, createShelfSchema } from "./_schema"
+import { createBookSchema, createShelfSchema, createTagSchema } from "./_schema"
 
 export const createBook = withValidation(
   createBookSchema,
@@ -36,3 +36,16 @@ export const createShelf = withValidation(
     return shelf
   }
 )
+
+export const createTag = withValidation(createTagSchema, async (data, user) => {
+  const shelf = await db.tag.create({
+    data: {
+      name: data.name,
+      userId: user.id,
+    },
+  })
+
+  revalidatePath("/tags")
+
+  return shelf
+})

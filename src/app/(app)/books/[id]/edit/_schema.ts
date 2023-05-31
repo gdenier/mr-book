@@ -7,4 +7,7 @@ export const editBookSchema = zfd.formData({
   summary: zfd.text(z.string().optional()),
   author: zfd.text(z.string().optional()),
   grade: zfd.numeric(z.number().min(0).max(5).optional()),
+  tags: z.array(
+    z.object({ id: zfd.text(z.string().cuid()), name: zfd.text(z.string()) })
+  ),
 })
