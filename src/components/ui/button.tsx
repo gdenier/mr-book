@@ -10,8 +10,6 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
-        destructive:
-          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
           "border border-input hover:bg-accent hover:text-accent-foreground",
         secondary:
@@ -31,12 +29,30 @@ const buttonVariants = cva(
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background",
         none: "",
       },
+      intent: {
+        destructive: "",
+      },
     },
     defaultVariants: {
       variant: "default",
       size: "default",
       focus: "default",
     },
+    compoundVariants: [
+      {
+        variant: "default",
+        intent: "destructive",
+        className:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+      },
+
+      {
+        variant: "outline",
+        intent: "destructive",
+        className:
+          "hover:!bg-destructive hover:!text-destructive-foreground !border-destructive !text-destructive ",
+      },
+    ],
   }
 )
 
@@ -47,11 +63,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, intent, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, intent, className }))}
         ref={ref}
         {...props}
       />

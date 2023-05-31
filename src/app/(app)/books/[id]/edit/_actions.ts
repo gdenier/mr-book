@@ -7,13 +7,12 @@ import { withValidation } from "~/lib/utils/server"
 import { editBookSchema } from "./_schema"
 
 export const editBook = withValidation(editBookSchema, async (data) => {
+  console.log(data)
   await db.book.update({
     where: { id: data.id },
-    data: {
-      title: data.title,
-    },
+    data,
   })
 
-  revalidatePath("/")
+  revalidatePath("/books")
   revalidatePath(`/books/${data.id}`)
 })

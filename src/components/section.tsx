@@ -5,16 +5,20 @@ export const Section = ({
   title,
   action,
 }: {
-  title: string
+  title: string | ReactNode
   action?: ReactNode
   children: ReactNode
 }): ReactElement => {
   return (
     <>
       <div className="flex items-center justify-between px-4 sm:px-6 md:px-8">
-        <h2 className="mt-10 flex min-h-[3rem] flex-wrap items-center gap-2 font-serif text-3xl font-semibold first:mt-0">
-          {title}
-        </h2>
+        {typeof title === "string" ? (
+          <h2 className="mt-10 flex min-h-[3rem] flex-wrap items-center gap-2 font-serif text-3xl font-semibold first:mt-0">
+            {title}
+          </h2>
+        ) : (
+          title
+        )}
         <div className="ml-auto flex gap-2">{action}</div>
       </div>
       <div className="px-4 py-4 sm:px-6 md:px-8">{children}</div>

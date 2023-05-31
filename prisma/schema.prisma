@@ -15,11 +15,37 @@ datasource db {
 model Book {
   id String @id @default(cuid())
 
-  title String
+  title       String
+  summary     String?   @db.Text
+  grade       Float?
+  author      String? // Must be converted to own table in futur
+  publication DateTime?
+  end         DateTime?
 
   volumes Volume[]
+  tags    TagOnBook[]
 
   userId String
+}
+
+model TagOnBook {
+  book Book @relation(fields: [bookId], references: [id])
+  tag  Tag  @relation(fields: [tagId], references: [id])
+
+  bookId String
+  tagId  String
+
+  @@id([bookId, tagId])
+  @@index([tagId])
+  @@index([bookId])
+}
+
+model Tag {
+  id String @id @default(cuid())
+
+  name String
+
+  books TagOnBook[]
 }
 
 model Volume {

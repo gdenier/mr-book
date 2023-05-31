@@ -6,19 +6,17 @@ import { z } from "zod"
 import { editBookSchema } from "./_schema"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Book } from "@prisma/client"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form"
-import { Input } from "~/components/ui/input"
+import { Form } from "~/components/ui/form"
 import { Button } from "~/components/ui/button"
 import { editBook } from "./_actions"
 import { redirect } from "next/navigation"
+import { Section } from "~/components/section"
+import { RotateCw, SaveIcon, TrashIcon } from "lucide-react"
+import { GeneralFormPart } from "./GeneralFormPart"
+import { ContentFormPart } from "./ContentFormPart"
+import { ExtraFormPart } from "./ExtraFormPart"
+
+export type EditBookFormValues = z.infer<typeof editBookSchema>
 
 export const EditBookForn = ({
   book,
@@ -27,7 +25,7 @@ export const EditBookForn = ({
   book: Book
   edit: typeof editBook
 }): ReactElement => {
-  const form = useForm<z.infer<typeof editBookSchema>>({
+  const form = useForm<EditBookFormValues>({
     resolver: zodResolver(editBookSchema),
     defaultValues: {
       title: book.title,
@@ -37,10 +35,12 @@ export const EditBookForn = ({
 
   const [isPending, startTransition] = useTransition()
 
-  const onSubmit = (values: z.infer<typeof editBookSchema>) => {
+  const onSubmit = (values: EditBookFormValues) => {
     startTransition(async () => {
       const data = new FormData()
-      Object.entries(values).forEach(([key, value]) => data.append(key, value))
+      Object.entries(values).forEach(([key, value]) =>
+        data.append(key, `${value}`)
+      )
       await edit(data)
       redirect(`/books/${book.id}`)
     })
@@ -49,20 +49,63 @@ export const EditBookForn = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Titre du livre</FormLabel>
-              <FormControl>
-                <Input placeholder="titre du livre" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">{isPending ? "..." : "Submit"}</Button>
+        <Section
+          title="Modifier le livre"
+          action={
+            <>
+              <Button
+                variant="outline"
+                intent="destructive"
+                className="gap-2"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <RotateCw className="h-5 w-5 animate-spin" />
+                ) : (
+                  <TrashIcon className="h-5 w-5" />
+                )}
+                Supprimer le livre
+              </Button>
+              <Button type="submit" className="gap-2" disabled={isPending}>
+                {isPending ? (
+                  <RotateCw className="h-5 w-5 animate-spin" />
+                ) : (
+                  <SaveIcon className="h-5 w-5" />
+                )}
+                Sauvegarder
+              </Button>
+            </>
+          }
+        >
+          <div className="space-y-6">
+            <GeneralFormPart />
+            <ContentFormPart />
+            <ExtraFormPart />
+            <div className="space-x-2">
+              <Button type="submit" className="gap-2" disabled={isPending}>
+                {isPending ? (
+                  <RotateCw className="h-5 w-5 animate-spin" />
+                ) : (
+                  <SaveIcon className="h-5 w-5" />
+                )}
+                Sauvegarder
+              </Button>
+              <Button
+                variant="outline"
+                intent="destructive"
+                className="gap-2"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <RotateCw className="h-5 w-5 animate-spin" />
+                ) : (
+                  <TrashIcon className="h-5 w-5" />
+                )}
+                Supprimer le livre
+              </Button>
+            </div>
+          </div>
+        </Section>
       </form>
     </Form>
   )
